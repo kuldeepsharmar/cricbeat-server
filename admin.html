@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CricBeat Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { background: #111; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
+        button { width: 30%; padding: 20px; margin: 1%; font-size: 20px; font-weight: bold; border-radius: 10px; border: none; cursor: pointer; }
+        .blue { background: #3b82f6; color: white; }
+        .red { background: #ef4444; color: white; }
+        input { padding: 10px; width: 40%; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>ADMIN PANEL</h1>
+    <h2 id="score">0/0 (0.0)</h2>
+    
+    <div>
+        <button class="blue" onclick="send('RUNS', 0)">0</button>
+        <button class="blue" onclick="send('RUNS', 1)">1</button>
+        <button class="blue" onclick="send('RUNS', 4)">4</button>
+        <button class="blue" onclick="send('RUNS', 6)">6</button>
+        <button class="red" onclick="send('WICKET', 0)">OUT</button>
+    </div>
+
+    <h3>Market Odds</h3>
+    <input id="back" placeholder="Back (90)">
+    <input id="lay" placeholder="Lay (92)">
+    <button class="blue" style="width: 80%" onclick="sendOdds()">Update Odds</button>
+
+    <script>
+        const API = window.location.origin;
+        
+        async function send(type, value) {
+            await fetch(API + '/api/admin/update', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ password: "cric123", matchId: "m1", type, value })
+            });
+            alert("Updated!");
+        }
+        async function sendOdds() {
+            const back = document.getElementById('back').value;
+            const lay = document.getElementById('lay').value;
+            send('MARKET', {back, lay});
+        }
+    </script>
+</body>
+</html>
